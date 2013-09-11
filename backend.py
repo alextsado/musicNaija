@@ -13,4 +13,6 @@ def hello(query):
     for t in tracks:
         try:
             js[t.title] = "{}?client_id={}".format(t.download_url, CLIENT_ID)
+        except AttributeError:
+            continue
     return json.dumps(js)
