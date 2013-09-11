@@ -6,7 +6,7 @@ CLIENT_ID = '707228f02dd69922dbac5f0bb309a07c'
 client = soundcloud.Client(client_id=CLIENT_ID)
 app = Flask(__name__)
 
-@app.route('/api/<query>')
+@app.route('/api?q=<query>')
 def hello(query):
     tracks = client.get('/tracks', q=query, filter='downloadable')
     js = {}
