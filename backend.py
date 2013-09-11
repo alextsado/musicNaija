@@ -15,4 +15,4 @@ def hello(query):
             js[t.title] = {'download_url': "{}?client_id={}".format(t.download_url, CLIENT_ID), 'stream_url': "{}?client_id={}".format(t.stream_url, CLIENT_ID)}
         except AttributeError:
             continue
-    return json.dumps(js)
+    return json.dumps(js, indent=2)
