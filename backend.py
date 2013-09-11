@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/api',methods=['GET','POST'])
 def hello():
-    tracks = client.get('/tracks', q=request.form['q'], filter='downloadable')
+    tracks = client.get('/tracks', q=request.args.get('q',''), filter='downloadable')
     js = {}
     for t in tracks:
         try:
