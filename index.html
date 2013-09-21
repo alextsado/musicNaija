@@ -7,7 +7,70 @@
         <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
             
             <link rel="stylesheet" href="css/main.css" type="text/css" />
-            
+          
+            <script>
+                
+                 function generateMovieLink(movie){
+                 return '<li><a href="javascript:void(0)" onclick="goToMovieDetailPage(\''+ movie.title + '\',\'' + movie.stream_url + '\')">'+ movie.artist + " - " + movie.title + '</a></li>';
+                 }
+
+                function goToMovieDetailPage(songTitle, stream_url){
+                
+                    var moviePage = $("<div data-role='page' data-url=dummyUrl> <div data-role='header'><h1>" + songTitle + "</h1><a href='#home' data-icon='home' data-iconpos='notext'>home</a></div><div data-role='content'><img border='0' src='" + stream_url + "' width=284 height=288></img></div><div data-role='footer'><h4>" + songTitle + "</h4></div></div>");
+                    
+                    moviePage.appendTo($.mobile.pageContainer);
+                    
+                    $.mobile.changePage( moviePage );
+                }
+           
+            //http://jsonlint.com/
+            $.ajax({
+                       url: "http://new-host-2.home/musicApp/songs.json",
+                       dataType: 'json',
+                       success: function(movies){
+                         // alert("token recieved: " + result.token);
+
+                   //Start of with empty list each time to get latest from server
+                   $("#movieList").empty();
+                   
+                   //add the movie items as List
+                   $.each(movies, function(i, movie){
+                          $('#movieList').append(generateMovieLink(movie));
+                          });
+                   
+                   //refresh the list view to show the latest changes
+                   $('#movieList').listview('refresh');
+                   
+                       },
+                       error: function(request, textStatus, errorThrown) {
+                       alert(textStatus);
+                       },
+                       complete: function(request, textStatus) { //for additional info
+                       }
+                       });
+                
+                //     $(document).ready(function(){
+                //     alert("as");
+                /*   var result = $.getJSON("http://new-host-2.home/musicApp/moviedetails.json", function(movies, JsonRequestBehavior.AllowGet){
+                 alert("nothing");
+                 //Start of with empty list each time to get latest from server
+                 $("#movieList").empty();
+                 
+                 //add the movie items as List
+                 $.each(movies, function(i, movie){
+                 var te = generateMovieLink(movie);
+                 $('#movieList').append(te);
+                 });
+                 
+                 //refresh the list view to show the latest changes
+                 $('#movieList').listview('refresh');
+                 
+                 });
+                 // console.log(result);
+                 //   alert(result.responseText);
+                 //                     });*/
+                
+            </script>
     </head>
     
     <body>
@@ -18,69 +81,19 @@
             </header>
             
             <article data-role="content">
-                <ul data-role="listview" data-filter='true'>
-                    <li>
-                        <a href='#dog'>
-                            <h1>Song 1 from Abuja</h1>
-                            <img src='imgs/pic1.jpg' alt='Min Pin'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href='#bear'>
-                            <h1>Song 2 from Benin</h1>
-                            <img src='imgs/pic2.jpg' alt='Another pic'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href='#dog'>
-                            <h1>Song 1 from Abuja</h1>
-                            <img src='imgs/pic1.jpg' alt='Min Pin'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href='#bear'>
-                            <h1>Song 2 from Benin</h1>
-                            <img src='imgs/pic2.jpg' alt='Another pic'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href='#dog'>
-                            <h1>Song 1 from Abuja</h1>
-                            <img src='imgs/pic1.jpg' alt='Min Pin'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href='#bear'>
-                            <h1>Song 2 from Benin</h1>
-                            <img src='imgs/pic2.jpg' alt='Another pic'/>
-                            <p>This is what happens when a friend blabal </p>
-                        </a>
-                    </li>
+                <ul data-role="listview" data-filter='true' data-inset='true' id='movieList'> 
                 </ul>
             </article>
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
                     <ul>
                         <li><a href='#' data-icon='home'>Home</a></li>
-                        <li><a href='#' data-icon='grid'>Photos</a></li>
+                        <li><a href='#' data-icon='grid'>Song List</a></li>
                         <li><a href='#' data-icon='info'>Info</a></li>
                     </ul>
                 </nav>
             </footer>
             
-        <div> <!--page-->
-        <div data-role="page" id='dog'>
-            <header data-role='header'>
-                <h1>Dog</h1>
-                <a href='home' data-icon='grid' data-iconpos='notext'>Home</a>
-            </header>
-            <img src='imgs/pic1.jpg' alt='Dog picture' class='fullscreen'/>
-        <div> <!--page-->
                         
     </body>
     
