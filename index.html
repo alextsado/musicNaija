@@ -4,11 +4,15 @@
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" type="text/css"/>
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+        <script src="js/audioplayer.js"></script>
+        <script src="js/jquery.fileDownload.js"></script>
         <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
             
         <link rel="stylesheet" href="css/main.css" type="text/css" />
         <script>
             ///////navigation stuff
+         //   var why = document.getElementById("searchpage");
+           //    alert(why.innerHTML);
             $("a[data-role=tab]").each(function () {
                                        var anchor = $(this);
                                        anchor.bind("click", function () {
@@ -24,27 +28,37 @@
                                           $.mobile.silentScroll(0);
                                           $.mobile.changePage.defaults.transition = 'slide';
                                           });
-            
             ////////music list generation stuff
-            function generateMovieLink(movie){
-                return '<li><a href="javascript:void(0)" onclick="goToSongDetailPage(\''+ movie.title + '\',\'' + movie.stream_url + '\')">'+ movie.artist + " - " + movie.title + '</a></li>';
+            var songs = new Array();
+            
+            //http://designmodo.com/audio-player/
+            function generateMusicLink(song, index, backLocation){
+                var artistStr = "";
+                if(song.artist)
+                    artistStr = song.artist + " - ";
+                
+                var ret = '<a href="javascript:void(0)" onclick="goToSongDetailPage(\''+ song.title + '\',\'' + song.download_url + '\',\'' + backLocation + '\')"><li id="mylistitem">'+ artistStr + song.title + '</li></a>';
+                
+                songs[index] = ret;
+                
+                return ret;
             }
         
-            function goToSongDetailPage(songTitle, stream_url){
+            var count = 0;
+            function goToSongDetailPage(songTitle, stream_url, backLocation){
+                $('#stopBtn')[0].onclick();
                 
-                var moviePage = $("<div data-role='page' data-url=songUrl> <img src='imgs/whitesmokebg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='#trendingpage' data-icon='home' data-iconpos='notext'>search</a></div><div data-role='content'><a href='#' data-role='button' class='frontPageBtn'><p>Preview</p></a><a href='#' data-role='button' class='frontPageBtn'><p>Download</p></a></div></div></div>");
-                
-                
+                var musicPage = $("<div data-role='page'id='songDetail' data-url=> <img src='imgs/whitesmokebg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='"+backLocation+"' data-icon='home' data-iconpos='notext' id='backBtn'>search</a></div><div data-role='content'><div id='preview'><p>Preview</p><audio id='previewsong' src='"+stream_url+"' preload='auto' controls></audio></div><a href='#' data-role='button' class='frontPageBtn'><p>Download</p></a></div></div><script>var audioElem = $('audio')["+count++ +"];\n$('#backBtn')[0].setAttribute('onclick', 'audioElem.pause()');\<\/script\></div>");
 
+                $('#stopBtn')[0].setAttribute('onclick', 'audioElem.pause()');
                 
-                moviePage.appendTo($.mobile.pageContainer);
+                musicPage.appendTo($.mobile.pageContainer);
                 
-                $.mobile.changePage( moviePage );
+                $.mobile.changePage( musicPage );
             }
             
-            //http://jsonlint.com/
-            $.ajax({
-                   url: "http://new-host-2.home/musicApp/songs.json",
+       /*     $.ajax({
+                   url: "http://new-host.home/musicApp/json.json",
                    dataType: 'json',
                    success: function(movies){
                    // alert("token recieved: " + result.token);
@@ -58,11 +72,11 @@
                           });
                    
                    $('#trendList').html($('#songList').html());
-                 //  $('#libraryList').html($('#songList').html());
+                   //  $('#libraryList').html($('#songList').html());
                    //refresh the list view to show the latest changes
                    $('#songList').listview('refresh');
                    $('#trendList').listview('refresh');
-                //   $('#libraryList').listview('refresh');
+                   //   $('#libraryList').listview('refresh');
                    
                    },
                    error: function(request, textStatus, errorThrown) {
@@ -70,71 +84,184 @@
                    },
                    complete: function(request, textStatus) { //for additional info
                    }
+                   });*/
+            
+            //http://jsonlint.com/
+        
+            $.ajax({
+                   type: 'GET',
+                   url: "http://musicnaija.herokuapp.com/api/week_top_ten?callback=?",
+                   async: false,
+                   jsonpCallback: 'jsonCallback',
+                   contentType: "application/json",
+                   dataType: 'jsonp',
+                   success: function(songs){
+    
+                   //Start of with empty list each time to get latest from server
+                   $("#trendList").empty();
+                   
+                   //add the song items as List
+                   var j = 0;
+                   $.each(songs, function(i, song){
+                          $('#trendList').append(generateMusicLink(song, j++, "#trendingpage"));
+                          });
+          
+                   //refresh the list view to show the latest changes
+                   $('#trendList').listview('refresh');
+                  
+                
+                   console.dir(songs);
+                   },
+                   error: function(e) {
+                   console.log(e.message);
+                   }
                    });
+            
+            function searchForSong(songName){
+                if(songName != ""){
+                    $.ajax({
+                       type: 'GET',
+                       url: "http://musicnaija.herokuapp.com/api?q="+ songName + "&callback=?",
+                       async: false,
+                       jsonpCallback: 'jsonCallback',
+                       contentType: "application/json",
+                       dataType: 'jsonp',
+                       success: function(songs){
+                       
+                       //Start of with empty list each time to get latest from server
+                       $("#songList").empty();
+                       
+                       //add the movie items as List
+                       var j = 0;
+                       $.each(songs, function(i, song){
+                              $('#songList').append(generateMusicLink(song, j++, "#searchpage"));
+                              });
+                       
+                       //refresh the list view to show the latest changes
+                       $('#songList').listview('refresh');
+                       
+                       console.dir(songs);
+                       },
+                       error: function(e) {
+                       console.log(e.message);
+                       }
+                    });
+                }
+            }
+            
+   
+            $(document).ready(function(){
+                               $('#mylistitem').css('width', window.innerWidth * .100);
+                              var i = 0;
+                              while($(".bgpic")[i]){
+                               $(".bgpic")[i++].setAttribute("src", "imgs/whitesmokebg.png");
+                              }
+                              
+                              });
+            
+            $( "#mypanel" ).panel( "open" , optionsHash );
+            
         </script>
          
     </head>
     
     <body>
+
         <div id="home" data-role="page">
+            <div data-role="panel" id="mypanel">
+                some content
+            </div>  <!-- /panel -->
             <div data-role="content">
-              <img src="imgs/whitesmokebg.png" class="fullscreen">
+              <img class="fullscreen bgpic">
                     
               <div id="onbackground">
+                   <a href="#mypanel" data-icon='grid' data-iconpos='notext'>pl</a>
                 <h1 id='maintitle'> Music Naija </h1>
 
                 <a href="#searchpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>search</p></a>
                 <a href="#trendingpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>trending</p></a>
-                <a href="#librarypage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>my library</p></a>
+              <!--  <a href="#librarypage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>my library</p></a> -->
                 <hr/>
                 <p style="text-align:center; font-size:15px;"> &copy; 2013 xelaApps </p>
+                 
               </div>
             </div>
         </div> <!--page-->
         
         <div id="searchpage" data-role="page">
-            <article data-role="content">
-                <img src="imgs/whitesmokebg.png" class="fullscreen">
+
+            <img class="fullscreen bgpic">
+          <!--  <div data-role="panel" id="mypanel">
+                some content
+            </div>   /panel -->
+            <div id="onbackground">
+             
                 
-                <div id="onbackground">
-                    <ul data-role="listview" data-filter='true' data-inset='true' data-filter-reveal="true" data-filter-placeholder="SONG ARTISTS OR ALBUM"  id='songList'>
-                    </ul>
-                     
+                <div data-role='header'>
+                    <h1>Songs</h1>
+                    <a href="#mypanel" data-icon='grid' data-iconpos='notext'>open panel</a>
+                    <a href="#" onclick="" id="stopBtn"><img src="imgs/home_icon_edit.png" alt="Stop" class="ui-li-icon footer-icon2"/></a>
                 </div>
-                   
-            </article>
+                
+                <article data-role="content">
+
+                    <input id="searchbar" placeholder="SONG ARTISTS OR ALBUM" data-type="search" class="ui-input-text ui-body-c">
+                        <a href='#' onclick="searchForSong($('#searchbar')[0].value)" class='searchBtn'>SEARCH</a><br/>
+                    <ul data-role="listview" data-inset='true' id='songList'>
+                    </ul>
+             
+            
+                </article>
+            </div>
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
                     <ul>
+                         <li><a href="#home" ><img src="imgs/home_icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Home</a></li>
                         <li><a href="#searchpage"><img src="imgs/globe_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Search</a></li>
                         <li><a href="#trendingpage"><img src="imgs/headphones_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Trending</a></li>
-                        <li><a href="#librarypage"><img src="imgs/music-icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>My Library</a></li>
+                       
                     </ul>
                 </nav>
             </footer>
         </div> <!--page-->
         <div id="trendingpage" data-role="page">
-            <article data-role="content">
-                <img src="imgs/whitesmokebg.png" class="fullscreen">
-                    
-                    <div id="onbackground">
-                        <ul data-role="listview" data-filter='true' data-inset='true' data-filter-placeholder="SONG ARTISTS OR ALBUM" id='trendList'>
-                        </ul>
-                    </div>
-                    </article>
+            
+            <img class="fullscreen bgpic"/>
+            
+            <div id="onbackground">
+            
+              <div data-role='header'>
+                <h1>Songs</h1>
+              <!--  <a href="#mypanel" data-icon='grid' data-iconpos='notext'>open panel</a>-->
+              </div>
+            
+              <article data-role="content">
+
+                    <h1 id='maintitle'> Top 10 Music </h1>
+                    <ul data-role="listview" data-inset='true'id='trendList'>
+                    </ul>
+             
+              </article>
+                
+            </div>
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
                     <ul>
+                        <li><a href="#home" ><img src="imgs/home_icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Home</a></li>
                         <li><a href="#searchpage"><img src="imgs/globe_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Search</a></li>
                         <li><a href="#trendingpage"><img src="imgs/headphones_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Trending</a></li>
-                        <li><a href="#librarypage"><img src="imgs/music-icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>My Library</a></li>
                     </ul>
                 </nav>
+               
             </footer>
         </div> <!--page-->
         <div id="librarypage" data-role="page">
+            <div data-role='header'>
+                <h1>Songs</h1>
+              <!--  <a href="#mypanel" data-icon='home' data-iconpos='notext'>open panel</a> -->
+            </div>
             <article data-role="content">
-                <img src="imgs/whitesmokebg.png" class="fullscreen">
+                <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
                         <ul data-role="listview" data-filter='true' data-inset='true' data-filter-placeholder="SONG ARTISTS OR ALBUM" id='libraryList'>
@@ -145,71 +272,24 @@
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
                     <ul>
+                        <li><a href="#home" ><img src="imgs/home_icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Home</a></li>
                         <li><a href="#searchpage"><img src="imgs/globe_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Search</a></li>
                         <li><a href="#trendingpage"><img src="imgs/headphones_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>Trending</a></li>
-                        <li><a href="#librarypage"><img src="imgs/music-icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>My Library</a></li>
+                  <!--      <li><a href="#librarypage"><img src="imgs/music-icon_edit.png" alt="Great Britain" class="ui-li-icon footer-icon2"><br/>My Library</a></li>-->
                     </ul>
                 </nav>
             </footer>
         </div> <!--page-->
         
         <!--<li><a href="#"><img src="imgs/globe.png" alt="Great Britain" class="ui-li-icon">Great Britain</a></li>-->
-        <div id="searchpage2" data-role="page">
-            <div data-role="header">
-                <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
-                <h1>Page 1</h1>
-            </div>
-            <div data-role="content">
-                <p>Page 1 content</p>
-            </div>
-            <div data-role="footer" data-position="fixed">
-                <div data-role="navbar">
-                    <ul>
-                        <li><a href="#page-1" data-role="tab" data-icon="grid" class="ui-btn-active">Page 1</a></li>
-                        <li><a href="#page-2" data-role="tab" data-icon="grid">Page 2</a></li>
-                        <li><a href="#page-3" data-role="tab" data-icon="grid">Page 3</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div id="page-2" data-role="page">
-            <div data-role="header">
-                <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
-                <h1>Page 2</h1>
-            </div>
-            <div data-role="content">
-                <p>Page 2 content</p>
-            </div>
-            <div data-role="footer" data-position="fixed">
-                <div data-role="navbar">
-                    <ul>
-                        <li><a href="#page-1" data-role="tab" data-icon="grid">Page 1</a></li>
-                        <li><a href="#page-2" data-role="tab" data-icon="grid" class="ui-btn-active">Page 2</a></li>
-                        <li><a href="#page-3" data-role="tab" data-icon="grid">Page 3</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div id="page-3" data-role="page">
-            <div data-role="header">
-                <a href="#" data-icon="arrow-l" data-iconpos="left" data-rel="back" data-transition="slide" data-direction="reverse">Back</a>
-                <h1>Page 3</h1>
-            </div>
-            <div data-role="content">
-                <p>Page 3 content</p>
-            </div>
-            <div data-role="footer" data-position="fixed">
-                <div data-role="navbar">
-                    <ul>
-                        <li><a href="#page-1" data-role="tab" data-icon="grid">Page 1</a></li>
-                        <li><a href="#page-2" data-role="tab" data-icon="grid">Page 2</a></li>
-                        <li><a href="#page-3" data-role="tab" data-icon="grid" class="ui-btn-active">Page 3</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+             <script>
+            $( function()
+              {
+              $( 'audio' ).audioPlayer();
+              });
+           // $(".bgpic").setAttribute("src", "imgs/blackbg.jpg");
+            </script>
+ 
     </body>
     
 </html>
