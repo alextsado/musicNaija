@@ -16,5 +16,6 @@
     <author href="https://build.phonegap.com" email="hokadiri@yahoo.com">
         Hussein Kadiri
     </author>
-    <gap:plugin name="org.apache.cordova.file" />
+    <!-- Plugins can also be added here. --> 
+    <gap:plugin name="org.apache.cordova.file-transfer" />
 </widget>
