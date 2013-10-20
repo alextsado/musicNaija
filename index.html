@@ -10,7 +10,7 @@
             
         <link rel="stylesheet" href="css/main.css" type="text/css" />
         <script>
-            ///////navigation stuff
+         ///////navigation stuff
          //   var why = document.getElementById("searchpage");
            //    alert(why.innerHTML);
             $("a[data-role=tab]").each(function () {
@@ -28,7 +28,8 @@
                                           $.mobile.silentScroll(0);
                                           $.mobile.changePage.defaults.transition = 'slide';
                                           });
-            ////////music list generation stuff
+             
+                      ////////music list generation stuff
             var songs = new Array();
             
             //http://designmodo.com/audio-player/
@@ -48,7 +49,7 @@
             function goToSongDetailPage(songTitle, stream_url, backLocation){
                 $('#stopBtn')[0].onclick();
                 
-                var musicPage = $("<div data-role='page'id='songDetail' data-url=> <img src='imgs/whitesmokebg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='"+backLocation+"' data-icon='home' data-iconpos='notext' id='backBtn'>search</a></div><div data-role='content'><div id='preview'><p>Preview</p><audio id='previewsong' src='"+stream_url+"' preload='auto' controls></audio></div><a href='#' data-role='button' class='frontPageBtn'><p>Download</p></a></div></div><script>var audioElem = $('audio')["+count++ +"];\n$('#backBtn')[0].setAttribute('onclick', 'audioElem.pause()');\<\/script\></div>");
+                var musicPage = $("<div data-role='page'id='songDetail' data-url=> <img src='imgs/whitesmokebg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='"+backLocation+"' data-icon='home' data-iconpos='notext' id='backBtn'>search</a></div><div data-role='content'><div id='preview'><p>Preview</p><audio id='previewsong' src='"+stream_url+"' preload='auto' controls></audio></div><a href='#' data-role='button' class='frontPageBtn'><p id='downloadbtn'>Download</p></a></div></div><script>var audioElem = $('audio')["+count++ +"];\n$('#backBtn')[0].setAttribute('onclick', 'audioElem.pause()');\n$('#downloadbtn').click({song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},function (event) {var fileTransfer = new FileTransfer(); fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c','/sdcard/Download/skelewu.mp3',function(entry) {console.log('download complete: ' + entry.fullPath);},function(error) {console.log('download error source ' + error.source);console.log('download error target ' + error.target);console.log('upload error code' + error.code);}); alert(event.data.song_url);});\<\/script\></div>");
 
                 $('#stopBtn')[0].setAttribute('onclick', 'audioElem.pause()');
                 
@@ -156,7 +157,6 @@
                               while($(".bgpic")[i]){
                                $(".bgpic")[i++].setAttribute("src", "imgs/whitesmokebg.png");
                               }
-                              
                               });
             
             $( "#mypanel" ).panel( "open" , optionsHash );
