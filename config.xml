@@ -17,6 +17,7 @@
         Hussein Kadiri
     </author>
     <!-- Plugins can also be added here. --> 
-     <gap:plugin name="org.apache.cordova.file" version="0.2.4" />
+    <!-- <gap:plugin name="org.apache.cordova.file" version="0.2.4" /> -->
+     <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     <!-- <gap:plugin name="org.apache.cordova.file-transfer" /> -->
 </widget>
