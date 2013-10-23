@@ -50,52 +50,54 @@
                 // Called when a photo is successfully retrieved
                 //
                 function onPhotoURISuccess(imageURI) {
-                    // Uncomment to view the image file URI
-                    // console.log(imageURI);
+                    changeBgPic(imageURI){
+                        
+                        // Uncomment to view the image file URI
+                        // console.log(imageURI);
+                        
+                        // Get image handle
+                        //
+                        //    var largeImage = document.getElementById('campic');
+                        
+                        
+                        // Show the captured photo
+                        // The inline CSS rules are used to resize the image
+                        //
+                        //     largeImage.src = imageURI;
+                        //     $('#campic').css('display', 'block');
+                    }
                     
-                    // Get image handle
+                    // A button will call this function
                     //
-                    var largeImage = document.getElementById('campic');
+                    function capturePhoto() {
+                        // Take picture using device camera and retrieve image as base64-encoded string
+                        navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+                                                    destinationType: destinationType.DATA_URL });
+                    }
                     
-                    
-                    // Show the captured photo
-                    // The inline CSS rules are used to resize the image
+                    // A button will call this function
                     //
-                    largeImage.src = imageURI;
-                    $('#campic').css('display', 'block');
-                }
-                
-                // A button will call this function
-                //
-                function capturePhoto() {
-                    // Take picture using device camera and retrieve image as base64-encoded string
-                    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-                                                destinationType: destinationType.DATA_URL });
-                }
-                
-                // A button will call this function
-                //
-                function capturePhotoEdit() {
-                    // Take picture using device camera, allow edit, and retrieve image as base64-encoded string
-                    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
-                                                destinationType: destinationType.DATA_URL });
-                }
-                
-                // A button will call this function
-                //
-                function getPhoto(source) {
-                    // Retrieve image file location from specified source
-                    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
-                                                destinationType: destinationType.FILE_URI,
-                                                sourceType: source });
-                }
-                
-                // Called if something bad happens.
-                //
-                function onFail(message) {
-                    alert('Failed because: ' + message);
-                }
-                
+                    function capturePhotoEdit() {
+                        // Take picture using device camera, allow edit, and retrieve image as base64-encoded string
+                        navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
+                                                    destinationType: destinationType.DATA_URL });
+                    }
+                    
+                    // A button will call this function
+                    //
+                    function getPhoto(source) {
+                        // Retrieve image file location from specified source
+                        navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50,
+                                                    destinationType: destinationType.FILE_URI,
+                                                    sourceType: source });
+                    }
+                    
+                    // Called if something bad happens.
+                    //
+                    function onFail(message) {
+                        alert('Failed because: ' + message);
+                    }
+                    
                 </script>
             
             <script>
@@ -164,9 +166,9 @@
                     if(typeof audioElem != 'undefined' )
                     audioElem.pause()
                     
-                    var i = 0;
-                    while($('.stopBtn')[i])
-                    $('.stopBtn')[i++].setAttribute('style', 'display:none' );
+                    /*       var i = 0;
+                     while($('.stopBtn')[i])
+                     $('.stopBtn')[i++].setAttribute('style', 'display:none' );*/
                 }
                 
                 /*     $.ajax({
@@ -274,7 +276,7 @@
                                   $('#campic').css('display', 'none');
                                   
                                   changeBgPic("img/whitesmokebg.png");
-                                  disableStopBtn();
+                                  // disableStopBtn();
                                   
                                   //    myCamera.initialize();
                                   
@@ -329,13 +331,14 @@
                     
                     <div id="onbackground">
                         
-                        <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+                        <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Change Background From Library</button><br>
                         <img src="" id="campic" style="width:200px; height:200px;">
                             <h1 id='maintitle'> Music Naija </h1>
                             
                             <a href="#searchpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>search</p></a>
                             <a href="#trendingpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>trending</p></a>
                             <!--  <a href="#librarypage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>my library</p></a> -->
+                            <br/><br/><br/><br/><br/><br><br/>
                             <hr/>
                             <p style="text-align:center; font-size:15px;"> &copy; 2013 xelaApps </p>
                             
@@ -394,7 +397,7 @@
                 
                 <article data-role="content">
                     
-                    <h1 id='maintitle'> Top 10 Music </h1>
+                    <h1 id='maintitle'> Top Nigerian Songs </h1>
                     <ul data-role="listview" data-inset='true'id='trendList'>
                     </ul>
                     
