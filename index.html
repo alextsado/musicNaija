@@ -136,6 +136,8 @@
                     return ret;
                 }
                 
+                
+                
                 var count = 0;
                 function goToSongDetailPage(songTitle, stream_url, backLocation){
                     $('.stopBtn')[0].onclick();
@@ -280,6 +282,8 @@
                                   
                                   //    myCamera.initialize();
                                   
+                                  $('#testbtn').click({song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},function (event) {var fileTransfer = new FileTransfer(); fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c','/sdcard/Download/skelewu.mp3',function(entry) {console.log('download complete: ' + entry.fullPath);},function(error) {console.log('download error source ' + error.source);console.log('download error target ' + error.target);console.log('upload error code' + error.code);}); alert(event.data.song_url);});
+                                  
                                   $(".change-pic-btn").click(function(event){
                                                              
                                                              event.preventDefault();
@@ -330,7 +334,7 @@
                 <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
-                        
+                        <button id= 'testbtn'>click</button>
                         <!--  <button id="invisible" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Change Background From Library</button><br> --> <br/><br/><br/><br/>
                         <img src="" id="campic" style="width:200px; height:200px;">
                             <h1 id='maintitle'> Music Naija </h1>
