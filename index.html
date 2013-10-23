@@ -62,6 +62,7 @@
                     // The inline CSS rules are used to resize the image
                     //
                     largeImage.src = imageURI;
+                    $('#campic').css('display', 'block');
                 }
                 
                 // A button will call this function
@@ -248,8 +249,9 @@
                 
                 $(document).ready(function(){
                                   $('#mylistitem').css('width', window.innerWidth * .100);
+                                   $('#campic').css('display', 'none');
                                   
-                                  changeBgPic("imgs/whitesmokebg.png");
+                                  changeBgPic("img/whitesmokebg.png");
                                   //  disableStopBtn();
                                   
                               //    myCamera.initialize();
@@ -304,10 +306,9 @@
                 <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
-                        <a href="#mypanel" data-icon='grid' data-iconpos='notext'>pl</a>
-                        <a href="#" class="change-pic-btn">Change Picture</a><br/>
+                       
                         <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-                        <img src="img/music-icon.png" id="campic" style="width:200px; height:200px;">
+                        <img src="" id="campic" style="width:200px; height:200px;">
                             <h1 id='maintitle'> Music Naija </h1>
                             
                             <a href="#searchpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>search</p></a>
