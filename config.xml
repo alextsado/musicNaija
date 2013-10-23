@@ -24,7 +24,8 @@
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <feature name="org.apache.cordova.file" version="0.2.4" />
     <feature name="org.apache.cordova.file-transfer" />
-    <feature name="org.apache.cordova.camera" />
+  <!--  <feature name="org.apache.cordova.camera" />  -->
+    <feature name="http://api.phonegap.com/1.0/camera"/>
 
     <icon src="icon.png" />
     
