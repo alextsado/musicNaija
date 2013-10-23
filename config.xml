@@ -25,5 +25,6 @@
     <feature name="org.apache.cordova.file" version="0.2.4" />
     <feature name="org.apache.cordova.file-transfer" />
 
-
+    <icon src="icon.png" />
+    
 </widget>
