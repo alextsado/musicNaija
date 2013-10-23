@@ -162,34 +162,37 @@
                               $('#mylistitem').css('width', window.innerWidth * .100);
                               
                               changeBgPic("imgs/whitesmokebg.png");
-                              disableStopBtn();
+                            //  disableStopBtn();
+                              
+                              $(".change-pic-btn").click(function(event){
+                                                    
+                                                                    event.preventDefault();
+                                                          
+                                                          if (!navigator.camera) {
+                                                          alert("Camera API not supported");
+                                                          return;
+                                                          }
+                                                          var options =   {   quality: 50,
+                                                          destinationType: Camera.DestinationType.DATA_URL,
+                                                          sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+                                                          encodingType: 0     // 0=JPG 1=PNG
+                                                          };
+                                                          
+                                                          navigator.camera.getPicture(
+                                                          function(imageData) {
+                                                          changeBgPic(imageData);
+                                                          },
+                                                          function() {
+                                                          alert('Error taking picture');
+                                                          },
+                                                          options);
+                                                          
+                                                          return false;
+                                                         });
                               
                               });
            
-            $(".change-pic-btn").click(function(event){
-                                       event.preventDefault();
-                                       
-                                       if (!navigator.camera) {
-                                       app.showAlert("Camera API not supported", "Error");
-                                       return;
-                                       }
-                                       var options =   {   quality: 50,
-                                       destinationType: Camera.DestinationType.DATA_URL,
-                                       sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
-                                       encodingType: 0     // 0=JPG 1=PNG
-                                       };
-                                       
-                                       navigator.camera.getPicture(
-                                                                   function(imageData) {
-                                                                 changeBgPic(imageData);
-                                                                   },
-                                                                   function() {
-                                                                   app.showAlert('Error taking picture', 'Error');
-                                                                   },
-                                                                   options);
-                                       
-                                       return false;
-                         });
+            
             
          //   $( "#mypanel" ).panel( "open" , optionsHash );
             
