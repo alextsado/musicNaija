@@ -5,7 +5,7 @@
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
         <script src="js/audioplayer.js"></script>
-      <!--  <script src="js/myCamera.js"></script> -->
+        <!--  <script src="js/myCamera.js"></script> -->
         <script src="js/jquery.fileDownload.js"></script>
         <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
             
@@ -136,38 +136,39 @@
                 
                 var count = 0;
                 function goToSongDetailPage(songTitle, stream_url, backLocation){
-                    $('#stopBtn')[0].onclick();
+                    $('.stopBtn')[0].onclick();
                     
                     var musicPage = $("<div data-role='page'id='songDetail' data-url=> <img src='img/whitesmokebg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='"+backLocation+"' data-icon='home' data-iconpos='notext' id='backBtn'>search</a></div><div data-role='content'><div id='preview'><p>Preview</p><audio id='previewsong' src='"+stream_url+"' preload='auto' controls></audio></div><a href='#' data-role='button' class='frontPageBtn'><p id='downloadbtn'>Download</p></a></div></div><script>var audioElem = $('audio')["+count++ +"];\n$('#backBtn')[0].setAttribute('onclick', 'enableStopBtn()');\n$('#downloadbtn').click({song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},function (event) {var fileTransfer = new FileTransfer(); fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c','/sdcard/Download/skelewu.mp3',function(entry) {console.log('download complete: ' + entry.fullPath);},function(error) {console.log('download error source ' + error.source);console.log('download error target ' + error.target);console.log('upload error code' + error.code);}); alert(event.data.song_url);});\<\/script\></div>");
                     
                     var i = 0;
                     while($('.stopBtn')[i]){
                         $('.stopBtn')[i++].setAttribute('onclick', 'disableStopBtn()');
-                    
+                    }
                     musicPage.appendTo($.mobile.pageContainer);
                     
                     $.mobile.changePage( musicPage );
                 }
                 
                 function enableStopBtn(){
-                    
-                    if(!audioElem.paused){
-                        var i = 0;
-                        while($('.stopBtn')[i])
-                        $('.stopBtn')[i++].setAttribute('style', 'display:block');
+                    if(typeof audioElem != 'undefined' ){
+                        if(!audioElem.paused){
+                            var i = 0;
+                            while($('.stopBtn')[i])
+                            $('.stopBtn')[i++].setAttribute('style', 'display:block');
+                        }
                     }
                     
                 }
-                    
+                
                 function disableStopBtn(){
                     if(typeof audioElem != 'undefined' )
                     audioElem.pause()
-                        
+                    
                     var i = 0;
                     while($('.stopBtn')[i])
                     $('.stopBtn')[i++].setAttribute('style', 'display:none' );
                 }
-                    
+                
                 /*     $.ajax({
                  url: "http://new-host.home/musicApp/json.json",
                  dataType: 'json',
@@ -270,12 +271,12 @@
                 
                 $(document).ready(function(){
                                   $('#mylistitem').css('width', window.innerWidth * .100);
-                                   $('#campic').css('display', 'none');
+                                  $('#campic').css('display', 'none');
                                   
                                   changeBgPic("img/whitesmokebg.png");
-                                  //  disableStopBtn();
+                                  disableStopBtn();
                                   
-                              //    myCamera.initialize();
+                                  //    myCamera.initialize();
                                   
                                   $(".change-pic-btn").click(function(event){
                                                              
@@ -310,7 +311,7 @@
                 //   $( "#mypanel" ).panel( "open" , optionsHash );
                 
                 </script>
-            <script src="phonegap.js"></script>
+            
             <!-- <script src="file.js"></script>-->
             <!--<script src="file-transfer.js"></script>-->
             
@@ -327,7 +328,7 @@
                 <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
-                       
+                        
                         <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
                         <img src="" id="campic" style="width:200px; height:200px;">
                             <h1 id='maintitle'> Music Naija </h1>
@@ -354,7 +355,7 @@
                     <div data-role='header'>
                         <h1>Songs</h1>
                         <a href="#mypanel" data-icon='grid' data-iconpos='notext'>open panel</a>
-                        <a href="#" onclick="" id="stopBtn"><img src="img/stop.png" alt="Stop" class="ui-li-icon footer-icon2"/></a>
+                        <a href="#" onclick="" class="stopBtn"><img src="img/stop.png" alt="Stop" class="ui-li-icon footer-icon2"/></a>
                     </div>
                     
                     <article data-role="content">
@@ -398,7 +399,7 @@
                     </ul>
                     
                 </article>
-                
+                <!-- Unexpected identifier    <a href="javascript:void(0)" onclick="goToSongDetailPage('Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)','https://api.soundcloud.com/tracks/29840349/download?client_id=707228f02dd69922dbac5f0bb309a07c','#searchpage')"><li id="mylistitem">Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)</li></a>  -->
             </div>
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
