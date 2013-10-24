@@ -50,21 +50,21 @@
                 // Called when a photo is successfully retrieved
                 //
                 function onPhotoURISuccess(imageURI) {
-                    changeBgPic(imageURI);
+                    //   changeBgPic(imageURI);
                     
                     // Uncomment to view the image file URI
                     // console.log(imageURI);
                     
                     // Get image handle
                     //
-                    //    var largeImage = document.getElementById('campic');
+                    var largeImage = document.getElementById('campic');
                     
                     
                     // Show the captured photo
                     // The inline CSS rules are used to resize the image
                     //
-                    //     largeImage.src = imageURI;
-                    //     $('#campic').css('display', 'block');
+                    largeImage.src = imageURI;
+                    //  $('#campic').css('display', 'block');
                 }
                 
                 // A button will call this function
@@ -303,29 +303,12 @@
                 
                 $(document).ready(function(){
                                   $('#mylistitem').css('width', window.innerWidth * .100);
-                                  $('#campic').css('display', 'none');
+                                  //    $('#campic').css('display', 'none');
                                   
                                   changeBgPic("img/testbg.png");
                                   // disableStopBtn();
                                   
                                   //    myCamera.initialize();
-                                  
-                                  $('#testbtn2').click({
-                                                       song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},
-                                                       function (event) {
-                                                       var fileTransfer = new FileTransfer();
-                                                       fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c',
-                                                                             '/sdcard/Download/skelewu.mp3',
-                                                                             function(entry) {
-                                                                             console.log('download complete: ' + entry.fullPath);
-                                                                             },
-                                                                             function(error) {
-                                                                             console.log('download error source ' + error.source);
-                                                                             console.log('download error target ' + error.target);
-                                                                             console.log('upload error code' + error.code);
-                                                                             });
-                                                       alert(event.data.song_url);
-                                                       });
                                   
                                   $(".change-pic-btn").click(function(event){
                                                              
