@@ -50,7 +50,7 @@
                 // Called when a photo is successfully retrieved
                 //
                 function onPhotoURISuccess(imageURI) {
-                    //   changeBgPic(imageURI);
+                 //   changeBgPic(imageURI);
                     
                     // Uncomment to view the image file URI
                     // console.log(imageURI);
@@ -64,7 +64,7 @@
                     // The inline CSS rules are used to resize the image
                     //
                     largeImage.src = imageURI;
-                    //  $('#campic').css('display', 'block');
+                  //  $('#campic').css('display', 'block');
                 }
                 
                 // A button will call this function
@@ -144,134 +144,134 @@
                     
                     var musicPage = $("<div data-role='page'id='songDetail' data-url=> <img src='img/testbg.png' class='fullscreen'><div id='onbackground'><div data-role='header'><h1>" + songTitle + "</h1><a href='"+backLocation+"' data-icon='home' data-iconpos='notext' id='backBtn'>search</a></div><br/><br/><br/><br/><div data-role='content'><div id='preview'><p>Preview</p><audio id='previewsong' src='"+stream_url+"' preload='auto' controls></audio></div><a href='#' data-role='button' class='frontPageBtn'><p id='downloadbtn'>Download</p></a></div></div><script>var audioElem = $('audio')["+count++ +"];\n$('#backBtn')[0].setAttribute('onclick', 'enableStopBtn()');\n$('#downloadbtn').click({song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},function (event) {var fileTransfer = new FileTransfer(); fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c','/sdcard/Download/skelewu.mp3',function(entry) {console.log('download complete: ' + entry.fullPath);},function(error) {console.log('download error source ' + error.source);console.log('download error target ' + error.target);console.log('upload error code' + error.code);}); alert(event.data.song_url);});\<\/script\></div>");
                     
-                    var i = 0;
-                    while($('.stopBtn')[i]){
+                        var i = 0;
+                        while($('.stopBtn')[i]){
                         $('.stopBtn')[i++].setAttribute('onclick', 'disableStopBtn()');
+                        }
+                        musicPage.appendTo($.mobile.pageContainer);
+                        
+                        $.mobile.changePage( musicPage );
                     }
-                    musicPage.appendTo($.mobile.pageContainer);
                     
-                    $.mobile.changePage( musicPage );
-                }
-                
-                function enableStopBtn(){
-                    if(typeof audioElem != 'undefined' ){
-                        if(!audioElem.paused){
-                            var i = 0;
-                            while($('.stopBtn')[i])
-                            $('.stopBtn')[i++].setAttribute('style', 'display:block');
+                    function enableStopBtn(){
+                        if(typeof audioElem != 'undefined' ){
+                            if(!audioElem.paused){
+                                var i = 0;
+                                while($('.stopBtn')[i])
+                                $('.stopBtn')[i++].setAttribute('style', 'display:block');
+                            }
+                        }
+                        
+                    }
+                    
+                    function disableStopBtn(){
+                        if(typeof audioElem != 'undefined' )
+                            audioElem.pause()
+                        
+                 /*       var i = 0;
+                        while($('.stopBtn')[i])
+                        $('.stopBtn')[i++].setAttribute('style', 'display:none' );*/
+                    }
+                    
+                    /*     $.ajax({
+                     url: "http://new-host.home/musicApp/json.json",
+                     dataType: 'json',
+                     success: function(movies){
+                     // alert("token recieved: " + result.token);
+                     
+                     //Start of with empty list each time to get latest from server
+                     $("#songList").empty();
+                     
+                     //add the movie items as List
+                     $.each(movies, function(i, movie){
+                     $('#songList').append(generateMovieLink(movie));
+                     });
+                     
+                     $('#trendList').html($('#songList').html());
+                     //  $('#libraryList').html($('#songList').html());
+                     //refresh the list view to show the latest changes
+                     $('#songList').listview('refresh');
+                     $('#trendList').listview('refresh');
+                     //   $('#libraryList').listview('refresh');
+                     
+                     },
+                     error: function(request, textStatus, errorThrown) {
+                     alert(textStatus);
+                     },
+                     complete: function(request, textStatus) { //for additional info
+                     }
+                     });*/
+                    
+                    //http://jsonlint.com/
+                    
+                    $.ajax({
+                           type: 'GET',
+                           url: "http://musicnaija.herokuapp.com/api/week_top_ten?callback=?",
+                           async: false,
+                           jsonpCallback: 'jsonCallback',
+                           contentType: "application/json",
+                           dataType: 'jsonp',
+                           success: function(songs){
+                           
+                           //Start of with empty list each time to get latest from server
+                           $("#trendList").empty();
+                           
+                           //add the song items as List
+                           var j = 0;
+                           $.each(songs, function(i, song){
+                                  $('#trendList').append(generateMusicLink(song, j++, "#trendingpage"));
+                                  });
+                           
+                           //refresh the list view to show the latest changes
+                           $('#trendList').listview('refresh');
+                           
+                           
+                           console.dir(songs);
+                           },
+                           error: function(e) {
+                           console.log(e.message);
+                           }
+                           });
+                    
+                    function searchForSong(songName){
+                        if(songName != ""){
+                            $.ajax({
+                                   type: 'GET',
+                                   url: "http://musicnaija.herokuapp.com/api?q="+ songName + "&callback=?",
+                                   async: false,
+                                   jsonpCallback: 'jsonCallback',
+                                   contentType: "application/json",
+                                   dataType: 'jsonp',
+                                   success: function(songs){
+                                   
+                                   //Start of with empty list each time to get latest from server
+                                   $("#songList").empty();
+                                   
+                                   //add the movie items as List
+                                   var j = 0;
+                                   $.each(songs, function(i, song){
+                                          $('#songList').append(generateMusicLink(song, j++, "#searchpage"));
+                                          });
+                                   
+                                   //refresh the list view to show the latest changes
+                                   $('#songList').listview('refresh');
+                                   
+                                   console.dir(songs);
+                                   },
+                                   error: function(e) {
+                                   console.log(e.message);
+                                   }
+                                   });
                         }
                     }
                     
-                }
-                
-                function disableStopBtn(){
-                    if(typeof audioElem != 'undefined' )
-                    audioElem.pause()
+                    function changeBgPic(newPic){
+                        var i = 0;
+                        while($(".bgpic")[i]){
+                            $(".bgpic")[i++].setAttribute("src", newPic);
+                        }
+                    }
                     
-                    /*       var i = 0;
-                     while($('.stopBtn')[i])
-                     $('.stopBtn')[i++].setAttribute('style', 'display:none' );*/
-                }
-                
-                /*     $.ajax({
-                 url: "http://new-host.home/musicApp/json.json",
-                 dataType: 'json',
-                 success: function(movies){
-                 // alert("token recieved: " + result.token);
-                 
-                 //Start of with empty list each time to get latest from server
-                 $("#songList").empty();
-                 
-                 //add the movie items as List
-                 $.each(movies, function(i, movie){
-                 $('#songList').append(generateMovieLink(movie));
-                 });
-                 
-                 $('#trendList').html($('#songList').html());
-                 //  $('#libraryList').html($('#songList').html());
-                 //refresh the list view to show the latest changes
-                 $('#songList').listview('refresh');
-                 $('#trendList').listview('refresh');
-                 //   $('#libraryList').listview('refresh');
-                 
-                 },
-                 error: function(request, textStatus, errorThrown) {
-                 alert(textStatus);
-                 },
-                 complete: function(request, textStatus) { //for additional info
-                 }
-                 });*/
-                
-                //http://jsonlint.com/
-                
-                $.ajax({
-                       type: 'GET',
-                       url: "http://musicnaija.herokuapp.com/api/week_top_ten?callback=?",
-                       async: false,
-                       jsonpCallback: 'jsonCallback',
-                       contentType: "application/json",
-                       dataType: 'jsonp',
-                       success: function(songs){
-                       
-                       //Start of with empty list each time to get latest from server
-                       $("#trendList").empty();
-                       
-                       //add the song items as List
-                       var j = 0;
-                       $.each(songs, function(i, song){
-                              $('#trendList').append(generateMusicLink(song, j++, "#trendingpage"));
-                              });
-                       
-                       //refresh the list view to show the latest changes
-                       $('#trendList').listview('refresh');
-                       
-                       
-                       console.dir(songs);
-                       },
-                       error: function(e) {
-                       console.log(e.message);
-                       }
-                       });
-                
-                function searchForSong(songName){
-                    if(songName != ""){
-                        $.ajax({
-                               type: 'GET',
-                               url: "http://musicnaija.herokuapp.com/api?q="+ songName + "&callback=?",
-                               async: false,
-                               jsonpCallback: 'jsonCallback',
-                               contentType: "application/json",
-                               dataType: 'jsonp',
-                               success: function(songs){
-                               
-                               //Start of with empty list each time to get latest from server
-                               $("#songList").empty();
-                               
-                               //add the movie items as List
-                               var j = 0;
-                               $.each(songs, function(i, song){
-                                      $('#songList').append(generateMusicLink(song, j++, "#searchpage"));
-                                      });
-                               
-                               //refresh the list view to show the latest changes
-                               $('#songList').listview('refresh');
-                               
-                               console.dir(songs);
-                               },
-                               error: function(e) {
-                               console.log(e.message);
-                               }
-                               });
-                    }
-                }
-                
-                function changeBgPic(newPic){
-                    var i = 0;
-                    while($(".bgpic")[i]){
-                        $(".bgpic")[i++].setAttribute("src", newPic);
-                    }
-                }
-                
                 function downloadFile(){
                     window.requestFileSystem(
                                              LocalFileSystem.PERSISTENT, 0,
@@ -301,49 +301,49 @@
                                              fail);
                 }
                 
-                $(document).ready(function(){
-                                  $('#mylistitem').css('width', window.innerWidth * .100);
+                    $(document).ready(function(){
+                                      $('#mylistitem').css('width', window.innerWidth * .100);
                                   //    $('#campic').css('display', 'none');
-                                  
-                                  changeBgPic("img/testbg.png");
-                                  // disableStopBtn();
-                                  
-                                  //    myCamera.initialize();
-                                  
-                                  $(".change-pic-btn").click(function(event){
-                                                             
-                                                             event.preventDefault();
-                                                             
-                                                             if (!navigator.camera) {
-                                                             alert("Camera API not supported");
-                                                             return;
-                                                             }
-                                                             var options =   {   quality: 50,
-                                                             destinationType: Camera.DestinationType.DATA_URL,
-                                                             sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
-                                                             encodingType: 0     // 0=JPG 1=PNG
-                                                             };
-                                                             
-                                                             navigator.camera.getPicture(
-                                                                                         function(imageData) {
-                                                                                         changeBgPic(imageData);
-                                                                                         },
-                                                                                         function() {
-                                                                                         alert('Error taking picture');
-                                                                                         },
-                                                                                         options);
-                                                             
-                                                             return false;
-                                                             });
-                                  
-                                  });
-                
-                
-                
-                //   $( "#mypanel" ).panel( "open" , optionsHash );
-                
+                                      
+                                      changeBgPic("img/testbg.png");
+                                     // disableStopBtn();
+                                      
+                                      //    myCamera.initialize();
+
+                                      $(".change-pic-btn").click(function(event){
+                                                                 
+                                                                 event.preventDefault();
+                                                                 
+                                                                 if (!navigator.camera) {
+                                                                 alert("Camera API not supported");
+                                                                 return;
+                                                                 }
+                                                                 var options =   {   quality: 50,
+                                                                 destinationType: Camera.DestinationType.DATA_URL,
+                                                                 sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+                                                                 encodingType: 0     // 0=JPG 1=PNG
+                                                                 };
+                                                                 
+                                                                 navigator.camera.getPicture(
+                                                                                             function(imageData) {
+                                                                                             changeBgPic(imageData);
+                                                                                             },
+                                                                                             function() {
+                                                                                             alert('Error taking picture');
+                                                                                             },
+                                                                                             options);
+                                                                 
+                                                                 return false;
+                                                                 });
+                                      
+                                      });
+                    
+                    
+                    
+                    //   $( "#mypanel" ).panel( "open" , optionsHash );
+                    
                 </script>
-            
+      
             <!-- <script src="file.js"></script>-->
             <!--<script src="file-transfer.js"></script>-->
             
@@ -360,10 +360,8 @@
                 <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
-                        <button id= 'testbtn' onclick="downloadFile()">click</button>
-                        <button id= 'testbtn2' onclick="downloadFile()">click2</button>
-                        <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Change Background From Library</button><br>  <br/><br/><br/><br/>
-                        <img src="" id="campic" style="width:200px; height:200px;">
+                          <br/><br/><br/><br/>
+                        
                             <h1 id='maintitle'> Music Naija </h1>
                             
                             <a href="#searchpage" data-role="button" data-shadow="false" data-theme="b" class="frontPageBtn"><p>search</p></a>
@@ -433,7 +431,7 @@
                     </ul>
                     
                 </article>
-                <!-- Unexpected identifier    <a href="javascript:void(0)" onclick="goToSongDetailPage('Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)','https://api.soundcloud.com/tracks/29840349/download?client_id=707228f02dd69922dbac5f0bb309a07c','#searchpage')"><li id="mylistitem">Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)</li></a>  -->
+          <!-- Unexpected identifier    <a href="javascript:void(0)" onclick="goToSongDetailPage('Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)','https://api.soundcloud.com/tracks/29840349/download?client_id=707228f02dd69922dbac5f0bb309a07c','#searchpage')"><li id="mylistitem">Snoop Dogg &amp; Wiz Khalifa - Smokin' On f. Juicy J (prod. Drumma Boy)</li></a>  -->
             </div>
             <footer data-role="footer" data-position='fixed'>
                 <nav data-role="navbar">
