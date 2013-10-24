@@ -272,6 +272,34 @@
                     }
                 }
                 
+                function downloadFile(){
+                    window.requestFileSystem(
+                                             LocalFileSystem.PERSISTENT, 0,
+                                             function onFileSystemSuccess(fileSystem) {
+                                             fileSystem.root.getFile(
+                                                                     "dummy.html", {create: true, exclusive: false},
+                                                                     function gotFileEntry(fileEntry){
+                                                                     var sPath = fileEntry.fullPath.replace("dummy.html","");
+                                                                     var fileTransfer = new FileTransfer();
+                                                                     fileEntry.remove();
+                                                                     fileTransfer.download(
+                                                                                           "http://www.w3.org/2011/web-apps-ws/papers/Nitobi.pdf",
+                                                                                           sPath + "theFile.pdf",
+                                                                                           function(theFile) {
+                                                                                           console.log("download complete: " + theFile.toURI());
+                                                                                           showLink(theFile.toURI());
+                                                                                           },
+                                                                                           function(error) {
+                                                                                           console.log("download error source " + error.source);
+                                                                                           console.log("download error target " + error.target);
+                                                                                           console.log("upload error code: " + error.code);
+                                                                                           }
+                                                                                           );
+                                                                     },
+                                                                     fail);
+                                             },
+                                             fail);
+                }
                 
                 $(document).ready(function(){
                                   $('#mylistitem').css('width', window.innerWidth * .100);
@@ -282,7 +310,22 @@
                                   
                                   //    myCamera.initialize();
                                   
-                                  $('#testbtn').click({song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},function (event) {var fileTransfer = new FileTransfer(); fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c','/sdcard/Download/skelewu.mp3',function(entry) {console.log('download complete: ' + entry.fullPath);},function(error) {console.log('download error source ' + error.source);console.log('download error target ' + error.target);console.log('upload error code' + error.code);}); alert(event.data.song_url);});
+                                  $('#testbtn2').click({
+                                                       song_url:'https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c'},
+                                                       function (event) {
+                                                       var fileTransfer = new FileTransfer();
+                                                       fileTransfer.download('https://api.soundcloud.com/tracks/108623436/download?client_id=707228f02dd69922dbac5f0bb309a07c',
+                                                                             '/sdcard/Download/skelewu.mp3',
+                                                                             function(entry) {
+                                                                             console.log('download complete: ' + entry.fullPath);
+                                                                             },
+                                                                             function(error) {
+                                                                             console.log('download error source ' + error.source);
+                                                                             console.log('download error target ' + error.target);
+                                                                             console.log('upload error code' + error.code);
+                                                                             });
+                                                       alert(event.data.song_url);
+                                                       });
                                   
                                   $(".change-pic-btn").click(function(event){
                                                              
@@ -334,7 +377,7 @@
                 <img class="fullscreen bgpic">
                     
                     <div id="onbackground">
-                        <button id= 'testbtn'>click</button>
+                        <button id= 'testbtn' onclick="downloadFile()">click</button>
                         <!--  <button id="invisible" onclick="getPhoto(pictureSource.PHOTOLIBRARY);">Change Background From Library</button><br> --> <br/><br/><br/><br/>
                         <img src="" id="campic" style="width:200px; height:200px;">
                             <h1 id='maintitle'> Music Naija </h1>
